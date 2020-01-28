@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { login } from "../actions/authActions";
+import { login, clearErrors } from "../actions/authActions";
 import { setAlert } from "../actions/alertActions";
 import { withRouter } from "react-router-dom";
 
@@ -44,7 +44,11 @@ class Login extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.isAuthenticated) {
-      this.props.history.push("/user");
+      this.props.history.push("/home");
+    }
+    if (nextProps.error) {
+      this.props.setAlert("Email Invalido O Contraseña", "danger", 3000);
+      this.props.clearErrors();
     }
   }
 
@@ -160,6 +164,9 @@ class Login extends React.Component {
   }
 }
 const mapStateToProps = store => ({
-  isAuthenticated: store.auth.isAuthenticated
+  isAuthenticated: store.auth.isAuthenticated,
+  error: store.auth.error
 });
-export default connect(mapStateToProps, { setAlert, login })(withRouter(Login));
+export default connect(mapStateToProps, { setAlert, login, clearErrors })(
+  withRouter(Login)
+);

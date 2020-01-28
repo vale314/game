@@ -14,6 +14,9 @@ import "react-notification-alert/dist/animate.css";
 
 import Index from "./pages/index";
 import Login from "./pages/login";
+import Alert from "./layout/alert";
+import PrivateRoute from "./routing/privateRoute";
+import Home from "./pages/home.js";
 
 const hist = createBrowserHistory();
 
@@ -22,9 +25,11 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={hist}>
+          <Alert />
           <Switch>
             <Route path="/" exact render={props => <Index {...props} />} />
-            <Route path="/login" exact render={props => <Login />} />
+            <Route path="/login" exact render={props => <Login {...props} />} />
+            <PrivateRoute path="/home" exact component={Home} />
           </Switch>
         </Router>
       </Provider>

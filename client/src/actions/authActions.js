@@ -19,7 +19,7 @@ export const loadUser = () => dispatch => {
   }
 
   axios
-    .get("/api/user")
+    .get("/api/auth")
     .then(res => {
       dispatch({
         type: USER_LOADED,
@@ -65,7 +65,7 @@ export const login = formData => dispatch => {
   };
 
   axios
-    .post("/api/user/login", formData, config)
+    .post("/api/auth", formData, config)
     .then(res => {
       dispatch({
         type: LOGIN_SUCCESS,
