@@ -56,6 +56,13 @@ io.on("connection", function(socket) {
     });
   });
 
+  socket.on("msg-room", data => {
+    console.log(data);
+    idToName(data.token, name => {
+      io.in(data.room).emit("msg-room", { name: name, body: data.text });
+    });
+  });
+
   //revisar
   socket.on("exit", data => {
     socket.leave(data.room);
