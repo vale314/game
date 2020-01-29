@@ -17,6 +17,7 @@ import Login from "./pages/login";
 import Alert from "./layout/alert";
 import PrivateRoute from "./routing/privateRoute";
 import Home from "./pages/home.js";
+import Register from "./pages/register";
 
 const hist = createBrowserHistory();
 
@@ -29,6 +30,11 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact render={props => <Index {...props} />} />
             <Route path="/login" exact render={props => <Login {...props} />} />
+            <Route
+              path="/register"
+              exact
+              render={props => <Register {...props} />}
+            />
             <PrivateRoute path="/home" exact component={Home} />
           </Switch>
         </Router>

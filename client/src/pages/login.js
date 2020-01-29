@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { login, clearErrors } from "../actions/authActions";
+import { login, clearErrors, loadUser } from "../actions/authActions";
 import { setAlert } from "../actions/alertActions";
 import { withRouter } from "react-router-dom";
 
@@ -36,7 +36,14 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
+    const { isAuthenticated } = this.props;
+
     document.body.classList.toggle("login-page");
+
+    this.props.loadUser();
+    if (isAuthenticated) {
+      this.props.history.push("/home");
+    }
   }
   componentWillUnmount() {
     document.body.classList.toggle("login-page");
@@ -167,6 +174,9 @@ const mapStateToProps = store => ({
   isAuthenticated: store.auth.isAuthenticated,
   error: store.auth.error
 });
-export default connect(mapStateToProps, { setAlert, login, clearErrors })(
-  withRouter(Login)
-);
+export default connect(mapStateToProps, {
+  setAlert,
+  login,
+  clearErrors,
+  loadUser
+})(withRouter(Login));

@@ -40,7 +40,7 @@ export const register = formData => dispatch => {
   };
 
   axios
-    .post("/api/user/signup", formData, config)
+    .post("/api/user", formData, config)
 
     .then(res => {
       dispatch({
