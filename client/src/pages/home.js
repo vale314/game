@@ -4,7 +4,8 @@ import { Launcher } from "react-chat-window";
 
 import { connect } from "react-redux";
 import { loadUser } from "../actions/authActions";
-import { startSession } from "../actions/chatActions";
+import { startSession, updateIdRoom } from "../actions/chatActions";
+import { setAlert } from "../actions/alertActions";
 
 import io from "socket.io-client";
 
@@ -28,17 +29,19 @@ class Home extends React.Component {
 
     this.state = {
       users: [],
-      messageList: []
+      messageList: [],
+      room: ""
     };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentWillMount() {
-    //this.props.loadUser();
+    this.props.loadUser();
     // eslint-disable-next-line
   }
 
   componentDidMount() {
-    this.props.startSession(socket.id);
-
     socket.on("active", payload => {
       this.setState({
         users: payload
@@ -58,6 +61,7 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("desconectado");
     socket.emit("exit", {
       room: "home"
     });
@@ -65,6 +69,8 @@ class Home extends React.Component {
   }
 
   _onMessageWasSent(message) {
+    const { name } = this.props.user;
+    message.data.text = name + ": " + message.data.text;
     socket.emit("msg-room", {
       room: "home",
       text: message,
@@ -72,7 +78,32 @@ class Home extends React.Component {
     });
   }
 
+  onSubmit(e) {
+    e.preventDefault();
+    const { room } = this.state;
+    if (room === "" || room === undefined || room === null) {
+      this.props.setAlert("Please fill in all fields", "danger");
+    } else {
+      this.props.updateIdRoom(room);
+      socket.emit("login-room", room);
+
+      socket.emit("exit", {
+        room: "home"
+      });
+
+      this.props.history.push({ pathname: "/game" });
+    }
+  }
+
+  onChange(e) {
+    this.setState({
+      ...this.state,
+      room: e.target.value
+    });
+  }
+
   render() {
+    const { room } = this.props;
     return (
       <>
         <div className="content">
@@ -89,11 +120,16 @@ class Home extends React.Component {
             <Col md="12" className="ml-auto mr-auto mt-5">
               <Card>
                 <CardBody className="text-center py-5">
-                  <Form action="/" className="form-horizontal" method="get">
+                  <Form className="form-horizontal" onSubmit={this.onSubmit}>
                     <Row>
                       <Col md="12">
                         <FormGroup>
-                          <Input type="text" />
+                          <Input
+                            type="text"
+                            name="room"
+                            value={room}
+                            onChange={this.onChange}
+                          />
                           <span style={{ color: "grey" }} className="form-text">
                             El Siguiete Campo No Lo Dejes En Blanco, Ingresa Tu
                             Codigo Nuevo Codigo O Previo De Tu Compañero
@@ -106,6 +142,7 @@ class Home extends React.Component {
                         className="btn-fill"
                         color="primary"
                         type="submit"
+                        onClick={this.onSubmit}
                       >
                         Vamos
                       </Button>
@@ -161,4 +198,14 @@ class Home extends React.Component {
     );
   }
 }
-export default connect(null, { loadUser, startSession })(Home);
+
+const mapStateToProps = state => ({
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, {
+  loadUser,
+  startSession,
+  updateIdRoom,
+  setAlert
+})(Home);

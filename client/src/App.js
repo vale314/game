@@ -18,6 +18,7 @@ import Alert from "./layout/alert";
 import PrivateRoute from "./routing/privateRoute";
 import Home from "./pages/home.js";
 import Register from "./pages/register";
+import Game from "./pages/game";
 
 const hist = createBrowserHistory();
 
@@ -35,7 +36,9 @@ class App extends React.Component {
               exact
               render={props => <Register {...props} />}
             />
+
             <PrivateRoute path="/home" exact component={Home} />
+            <PrivateRoute path="/game" exact component={Game} />
           </Switch>
         </Router>
       </Provider>

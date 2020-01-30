@@ -47,7 +47,6 @@ io.on("connection", function(socket) {
               name: io.sockets.sockets[client].nickname,
               id: io.sockets.sockets[client].id
             });
-            console.log(users);
           }
         });
 
@@ -57,10 +56,13 @@ io.on("connection", function(socket) {
   });
 
   socket.on("msg-room", data => {
-    console.log(data);
     idToName(data.token, name => {
       io.in(data.room).emit("msg-room", { name: name, body: data.text });
     });
+  });
+
+  socket.on("login-room", data => {
+    socket.join(data);
   });
 
   //revisar
