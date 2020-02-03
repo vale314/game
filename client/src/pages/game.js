@@ -7,22 +7,40 @@ import { setAlert } from "../actions/alertActions";
 import { withRouter } from "react-router-dom";
 import { CardBody, Col, Row, Card } from "reactstrap";
 
+import highlight_img from "../assets/img/hightlight.png";
+import pointer_img from "../assets/img/pointer.png";
+import roulette_img_under_highlight from "../assets/img/rou_under_high.png";
+import roulette_img_on_highlight from "../assets/img/rou_on_high.png";
+
+import wheel from "../assets/img/wheel.png";
+
+import Roulette from "react-roulette-game";
+
 import io from "socket.io-client";
 const socket = io("http://localhost:5000");
+
+function sleep(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      messageList: []
+      messageList: [],
+      inicio: false
     };
+    this.onChangeRoultte = this.onChangeRoultte.bind(this);
   }
 
   componentWillMount() {
-    this.props.loadUser();
+    //this.props.loadUser();
     // eslint-disable-next-line
     socket.emit("login-room", this.props.id_room);
+    this.setState({
+      inicio: true
+    });
   }
 
   componentDidMount() {
@@ -56,7 +74,27 @@ class Game extends React.Component {
     });
   }
 
+  onChangeRoultte(e) {
+    console.log(e);
+  }
+
+  onClickRoulette(e) {}
+
   render() {
+    const items = ["Apple", "Banana", "Cherry"];
+    const colors = ["#F76156", "#FBD1A2", "#BED558"];
+
+    const prize_arr = [
+      "Baseball",
+      "Rugby",
+      "Tennis",
+      "Soccer",
+      "Badminton",
+      "Basketball"
+    ];
+
+    const { inicio } = this.state;
+
     return (
       <div className="content">
         <Row>
@@ -68,6 +106,32 @@ class Game extends React.Component {
                 <h3> {this.props.id_room} </h3>
               </CardBody>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="4" className="ml-auto mr-auto mt-5">
+            <Roulette
+              roulette_img_under_highlight={wheel}
+              highlight_img={highlight_img}
+              pointer_img={pointer_img}
+              prize_arr={prize_arr}
+              start={() => {
+                sleep(5000).then(() => {
+                  return inicio;
+                });
+              }}
+              start_callback={e => {
+                console.log("inicio de ruleta");
+              }}
+              on_complete={e => {
+                console.log(e);
+                sleep(5000).then(() => {
+                  this.setState({
+                    inicio: false
+                  });
+                });
+              }}
+            />
           </Col>
         </Row>
         <Launcher
