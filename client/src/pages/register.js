@@ -49,7 +49,7 @@ class SignUp extends React.Component {
 
     this.props.loadUser();
     if (isAuthenticated) {
-      this.props.history.push("/home");
+      this.props.history.push("/user/home");
     }
   }
   componentWillUnmount() {

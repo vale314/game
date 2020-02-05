@@ -15,7 +15,7 @@ import wheel from "../assets/img/wheel.png";
 import Roulette from "react-roulette-game";
 
 import io from "socket.io-client";
-const socket = io("http://localhost:5000");
+var socket = io("http://localhost:5000");
 
 class Game extends React.Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class Game extends React.Component {
       messageList: [],
       inicio: false,
       numero: null,
-      count: 0,
+      count: 10,
       num_apostar: 0
     };
     this.onChangeRoultte = this.onChangeRoultte.bind(this);
@@ -48,32 +48,34 @@ class Game extends React.Component {
       1000
     );
   }
-  /*  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.count > 0) {
       this.contadorTimeout();
     }
-  }*/
+  }
 
   componentWillUnmount() {
+    const { id_room } = this.props;
+
     clearTimeout(this.time);
+
+    console.log("desconectado");
+    socket.emit("exit", {
+      room: { id_room }
+    });
+    socket.close();
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    const { count } = this.state;
-
-    if (count == 0) {
-      clearTimeout(this.time);
-    }
-  }
-
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.loadUser();
     // eslint-disable-next-line
-    socket.emit("login-room", this.props.id_room);
   }
 
   componentDidMount() {
+    socket = io("http://localhost:5000");
     const { id_room } = this.props.id_room;
+
+    socket.emit("login-room", this.props.id_room);
 
     socket.on("active", payload => {
       this.setState({

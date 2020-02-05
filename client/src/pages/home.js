@@ -3,7 +3,7 @@ import ReactTable from "react-table-6";
 import { Launcher } from "react-chat-window";
 
 import { connect } from "react-redux";
-import { loadUser } from "../actions/authActions";
+import { loadUser, clearErrors } from "../actions/authActions";
 import { startSession, updateIdRoom } from "../actions/chatActions";
 import { setAlert } from "../actions/alertActions";
 
@@ -21,9 +21,10 @@ import {
   Button
 } from "reactstrap";
 
-const socket = io("http://localhost:5000");
+var socket = io("http://localhost:5000");
 
 class Home extends React.Component {
+  _isMounted = true;
   constructor(props) {
     super(props);
 
@@ -36,28 +37,54 @@ class Home extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.loadUser();
     // eslint-disable-next-line
   }
 
   componentDidMount() {
-    socket.on("active", payload => {
-      this.setState({
-        users: payload
+    socket = io("http://localhost:5000");
+    if (this._isMounted) {
+      socket.on("active", payload => {
+        console.log(payload);
+        this.setState({
+          users: payload
+        });
       });
-    });
 
-    socket.on("msg-room", payload => {
-      this.setState({
-        messageList: [...this.state.messageList, payload.body]
+      socket.on("msg-room", payload => {
+        this.setState({
+          messageList: [...this.state.messageList, payload.body]
+        });
       });
-    });
 
-    socket.emit("active", {
-      token: localStorage.getItem("tokenUser"),
-      room: "home"
-    });
+      socket.emit("active", {
+        token: localStorage.getItem("tokenUser"),
+        room: "home"
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      socket.on("active", payload => {
+        console.log(payload);
+        this.setState({
+          users: payload
+        });
+      });
+
+      socket.on("msg-room", payload => {
+        this.setState({
+          messageList: [...this.state.messageList, payload.body]
+        });
+      });
+
+      socket.emit("active", {
+        token: localStorage.getItem("tokenUser"),
+        room: "home"
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -66,6 +93,7 @@ class Home extends React.Component {
       room: "home"
     });
     socket.close();
+    this._isMounted = false;
   }
 
   _onMessageWasSent(message) {
@@ -87,11 +115,7 @@ class Home extends React.Component {
       this.props.updateIdRoom(room);
       socket.emit("login-room", room);
 
-      socket.emit("exit", {
-        room: "home"
-      });
-
-      this.props.history.push({ pathname: "/game" });
+      this.props.history.push({ pathname: "/user/game" });
     }
   }
 
@@ -103,7 +127,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { room } = this.props;
+    const { room } = this.state;
     return (
       <>
         <div className="content">
@@ -153,6 +177,7 @@ class Home extends React.Component {
             </Col>
             <Col md="12">
               <CardBody>
+                {this.state.users.length}
                 <ReactTable
                   data={this.state.users}
                   filterable
@@ -200,12 +225,14 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, {
   loadUser,
   startSession,
   updateIdRoom,
-  setAlert
+  setAlert,
+  clearErrors
 })(Home);

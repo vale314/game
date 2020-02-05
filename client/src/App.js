@@ -15,10 +15,12 @@ import "react-notification-alert/dist/animate.css";
 import Index from "./pages/index";
 import Login from "./pages/login";
 import Alert from "./layout/alert";
+import Navbar from "./layout/nabvar";
 import PrivateRoute from "./routing/privateRoute";
 import Home from "./pages/home.js";
 import Register from "./pages/register";
 import Game from "./pages/game";
+import Ganadores from "./pages/ganadores";
 
 const hist = createBrowserHistory();
 
@@ -28,6 +30,7 @@ class App extends React.Component {
       <Provider store={store}>
         <Router history={hist}>
           <Alert />
+          <Navbar />
           <Switch>
             <Route path="/" exact render={props => <Index {...props} />} />
             <Route path="/login" exact render={props => <Login {...props} />} />
@@ -37,8 +40,9 @@ class App extends React.Component {
               render={props => <Register {...props} />}
             />
 
-            <PrivateRoute path="/home" exact component={Home} />
-            <PrivateRoute path="/game" exact component={Game} />
+            <PrivateRoute path="/user/home" exact component={Home} />
+            <PrivateRoute path="/user/game" exact component={Game} />
+            <PrivateRoute path="/user/ganadores" exact component={Ganadores} />
           </Switch>
         </Router>
       </Provider>
