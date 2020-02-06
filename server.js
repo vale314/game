@@ -49,7 +49,6 @@ io.on("connection", function(socket) {
             });
           }
         });
-        console.log(users, data.room);
         io.to(data.room).emit("active", users);
       });
     });
