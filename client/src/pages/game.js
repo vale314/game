@@ -30,7 +30,6 @@ class Game extends React.Component {
       count: 10,
       num_apostar: 0
     };
-    this.onChangeRoultte = this.onChangeRoultte.bind(this);
     this.contadorTimeout = this.contadorTimeout.bind(this);
     this.onChange = this.onChange.bind(this);
   }
@@ -107,10 +106,6 @@ class Game extends React.Component {
     });
   }
 
-  onChangeRoultte(e) {
-    console.log(e);
-  }
-
   onChange(e) {
     const value = e.target.value;
 
@@ -118,8 +113,6 @@ class Game extends React.Component {
       num_apostar: value
     });
   }
-
-  onClickRoulette(e) {}
 
   render() {
     const prize_arr = [

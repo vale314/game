@@ -86,6 +86,7 @@ class navbar extends React.Component {
         this.setState({
           site: ""
         });
+        localStorage.removeItem("tokenUser");
         this.props.logout();
 
         this.props.history.push({
@@ -97,9 +98,9 @@ class navbar extends React.Component {
           pathname: "/user/home"
         });
         break;
-      case "/user/game":
+      case "/user/single":
         this.props.history.push({
-          pathname: "/user/game"
+          pathname: "/user/single"
         });
         break;
       case "/user/ganadores":
@@ -219,7 +220,7 @@ class navbar extends React.Component {
             <Collapse isOpen={isOpen} navbar>
               <Nav className="mr-auto" navbar>
                 <NavItem>
-                  <NavLink onClick={e => this.onClickRoute(e, "/user/game")}>
+                  <NavLink onClick={e => this.onClickRoute(e, "/user/single")}>
                     Game
                   </NavLink>
                 </NavItem>

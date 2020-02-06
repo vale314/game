@@ -17,6 +17,10 @@ export const loadUser = () => dispatch => {
   if (localStorage.tokenUser) {
     setAuthToken(localStorage.tokenUser);
   }
+  if (localStorage.tokenUser == null || localStorage.tokenUser == undefined) {
+    dispatch({ type: LOGOUT });
+    return dispatch({ type: AUTH_ERROR });
+  }
 
   axios
     .get("/api/auth")
