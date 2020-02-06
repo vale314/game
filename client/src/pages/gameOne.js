@@ -64,9 +64,9 @@ class GameOne extends React.Component {
     const { money } = this.state.user;
 
     if (cantidad > money) {
-      return setAlert(
+      return this.props.setAlert(
         "Cantidad Insuficiente Agrega Mas Creditos",
-        " Danger",
+        "danger",
         3000
       );
     }
