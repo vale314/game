@@ -1,8 +1,10 @@
 import React from "react";
+import axios from "axios";
 
 import { connect } from "react-redux";
 import { setAlert } from "../actions/alertActions";
 import { login, clearErrors, loadUser } from "../actions/authActions";
+import setAuthToken from "../utils/setAuthToken";
 
 import {
   Button,
@@ -100,6 +102,24 @@ class GameOne extends React.Component {
       this.setState({
         stop: false
       });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      setAuthToken(localStorage.tokenUser);
+
+      axios
+        .post("/api/user/update", user, config)
+
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 

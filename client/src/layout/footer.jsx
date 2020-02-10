@@ -7,7 +7,7 @@ class Footer extends React.Component {
     super(props);
 
     this.state = {
-      muted: false
+      muted: true
     };
 
     this.clickMuted = this.clickMuted.bind(this);
@@ -15,7 +15,6 @@ class Footer extends React.Component {
 
   clickMuted(e) {
     e.preventDefault();
-    console.log("hello");
     this.setState({
       muted: !this.state.muted
     });

@@ -4,8 +4,43 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
+const auth = require("../middleware/auth");
 
 const User = require("../models/User");
+
+// @route     GET admin/admins
+// @desc      Obtener Todos Users
+// @access    Private
+router.get("/all", auth, async (req, res) => {
+  try {
+    const users = await User.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route     GET api/auth
+// @desc      Get logged in user and return user
+// @access    Private
+router.post("/update", auth, async (req, res) => {
+  try {
+    const { money } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: { money: money } },
+      { new: true }
+    );
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route     POST api/users
 // @desc      Regiter a user
