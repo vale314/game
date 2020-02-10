@@ -155,7 +155,15 @@ class Home extends React.Component {
                     <span>{name}</span>
 
                     <CardTitle tag="h3">Tu Saldo Es: {money}</CardTitle>
-                    <Button color="warning">Single Player</Button>
+                    <Button
+                      color="warning"
+                      onClick={e => {
+                        e.preventDefault();
+                        this.props.history.push("/user/single");
+                      }}
+                    >
+                      Single Player
+                    </Button>
                     <br />
                     <Button color="warning">Multiplayer Player</Button>
                   </CardBody>

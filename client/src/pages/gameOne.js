@@ -25,7 +25,7 @@ import pointer_img from "../assets/img/pointer.png";
 
 import wheel from "../assets/img/wheel.png";
 
-import Roulette from "react-roulette-game";
+import Roulette from "../layout/Roulette";
 
 class GameOne extends React.Component {
   constructor(props) {

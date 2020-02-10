@@ -15,6 +15,7 @@ class Footer extends React.Component {
 
   clickMuted(e) {
     e.preventDefault();
+    console.log("hello");
     this.setState({
       muted: !this.state.muted
     });
