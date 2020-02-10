@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
+
+import Carrusel from "./Componentes/Carrusel";
 
 class Index extends React.Component {
   constructor(props) {
@@ -9,13 +11,11 @@ class Index extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h1> Hello Wolrd</h1>
-          </Col>
-        </Row>
-      </Container>
+      <React.Fragment>
+        <Container>
+          <Carrusel />
+        </Container>
+      </React.Fragment>
     );
   }
 }

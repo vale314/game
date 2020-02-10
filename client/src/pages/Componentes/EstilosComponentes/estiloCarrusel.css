@@ -1,0 +1,26 @@
+.fondo {
+	width: 1299px;
+	height: 560px;
+	max-width: 1299px;
+	max-height: 560px;
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+}
+
+.carousel-item {
+	background: rgb(0,100,34);
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+	max-width: 1299px;
+	max-height: 560px;
+	width: 1299px;
+	height: 560px;
+}
+
+.carousel-caption {
+	background-color: rgba(1,170,19,40);
+	font-family: "libre baskerville";
+	font-size: 40px;
+}

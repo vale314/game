@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import "./navbar.css";
 
 import { logout } from "../actions/authActions";
 import { connect } from "react-redux";
@@ -119,33 +120,51 @@ class navbar extends React.Component {
       return (
         <div>
           <Navbar
-            style={{ position: "sticky" }}
-            color="light"
+            style={{
+              position: "sticky",
+              background: '#043309'
+            }}
             light
             expand="md"
           >
-            <NavbarBrand onClick={e => this.onClickRoute(e, "/")}>
-              Home
+            <NavbarBrand 
+              style={{
+                color: '#FFFFFF'
+              }}
+              onClick={e => this.onClickRoute(e, "/")} 
+            >
+              <i className="letraCursiva">Home</i>
             </NavbarBrand>
             <NavbarToggler />
             <Collapse isOpen={true} navbar>
               <Nav className="mr-auto" navbar style={{ cursor: "default" }}>
                 <NavItem>
-                  <NavLink onClick={e => this.onClickRoute(e, "/login")}>
-                    Login
+                  <NavLink onClick={e => this.onClickRoute(e, "/login")}
+                    style={{
+                      color: '#FFFFFF'
+                    }}
+                  >
+                    <i className="letraCursiva">Login</i>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink onClick={e => this.onClickRoute(e, "/register")}>
-                    Signup
+                  <NavLink onClick={e => this.onClickRoute(e, "/register")}
+                    style={{
+                      color: '#FFFFFF'
+                    }}
+                  >
+                    <i className="letraCursiva">Signup</i>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
                     href="https://github.com/vale314/GAME"
                     target="_blank"
+                    style={{
+                      color: '#FFFFFF'
+                    }}
                   >
-                    GitHub
+                    <i className="letraCursiva">GitNub</i>
                   </NavLink>
                 </NavItem>
               </Nav>
