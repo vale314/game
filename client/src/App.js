@@ -22,6 +22,7 @@ import Register from "./pages/register";
 import Game from "./pages/game";
 import Ganadores from "./pages/ganadores";
 import gameOne from "./pages/gameOne";
+import Footer from "./layout/footer";
 
 const hist = createBrowserHistory();
 
@@ -47,6 +48,7 @@ class App extends React.Component {
             <PrivateRoute path="/user/single" exact component={gameOne} />
           </Switch>
         </Router>
+        <Footer />
       </Provider>
     );
   }
