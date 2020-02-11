@@ -164,7 +164,7 @@ class navbar extends React.Component {
                       color: '#FFFFFF'
                     }}
                   >
-                    <i className="letraCursiva">GitNub</i>
+                    <i className="letraCursiva">GitHub</i>
                   </NavLink>
                 </NavItem>
               </Nav>
