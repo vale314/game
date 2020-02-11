@@ -24,6 +24,8 @@ import Ganadores from "./pages/ganadores";
 import gameOne from "./pages/gameOne";
 import Footer from "./layout/footer";
 
+import gameMultiplayer from "./pages/gameMultiplayer";
+
 const hist = createBrowserHistory();
 
 class App extends React.Component {
@@ -46,6 +48,11 @@ class App extends React.Component {
             <PrivateRoute path="/user/game" exact component={Game} />
             <PrivateRoute path="/user/ganadores" exact component={Ganadores} />
             <PrivateRoute path="/user/single" exact component={gameOne} />
+            <PrivateRoute
+              path="/user/multiplayer"
+              exact
+              component={gameMultiplayer}
+            />
           </Switch>
         </Router>
         <Footer />

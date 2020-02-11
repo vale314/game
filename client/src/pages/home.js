@@ -49,7 +49,6 @@ class Home extends React.Component {
 
     if (this._isMounted) {
       socket.on("active", payload => {
-        console.log(payload);
         this.setState({
           users: payload
         });
@@ -123,7 +122,7 @@ class Home extends React.Component {
       this.props.updateIdRoom(room);
       socket.emit("login-room", room);
 
-      this.props.history.push({ pathname: "/user/game" });
+      this.props.history.push({ pathname: "/user/multiplayer" });
     }
   }
 
@@ -165,7 +164,15 @@ class Home extends React.Component {
                       Single Player
                     </Button>
                     <br />
-                    <Button color="warning">Multiplayer Player</Button>
+                    <Button
+                      color="warning"
+                      onClick={e => {
+                        e.preventDefault();
+                        this.props.history.push("/user/multiplayer");
+                      }}
+                    >
+                      Multiplayer Player
+                    </Button>
                   </CardBody>
                 </Card>
               </Row>
@@ -206,7 +213,7 @@ class Home extends React.Component {
                           type="submit"
                           onClick={this.onSubmit}
                         >
-                          Vamos
+                          Retar
                         </Button>
                       </Col>
                     </Form>
@@ -249,7 +256,7 @@ class Home extends React.Component {
           </Row>
           <Launcher
             agentProfile={{
-              teamName: "react-chat-window",
+              teamName: "Casino Global Sala",
               imageUrl:
                 "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
             }}

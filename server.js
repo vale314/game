@@ -20,6 +20,8 @@ const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
+var myMap = new Map();
+
 io.on("connection", function(socket) {
   socket.on("disconnected", () => {
     socket.disconnect(true);
@@ -29,6 +31,7 @@ io.on("connection", function(socket) {
     socket.join(data.room);
 
     var users = [];
+
     idToName(data.token, name => {
       socket.nickname = name;
 
@@ -58,6 +61,19 @@ io.on("connection", function(socket) {
 
   socket.on("login-room", data => {
     socket.join(data);
+  });
+
+  socket.on("get-time", data => {
+    if (myMap.get(data.room) > Date.now()) {
+      myMap.set(data.room, Date.now() + 30000);
+    }
+
+    if (myMap.get(data.room) == undefined) {
+      myMap.set(data.room, Date.now() + 30000);
+    }
+
+    console.log(data.room, myMap.get(data.room));
+    io.to(data.room).emit("get-time", { getTime: 0 });
   });
 
   //revisar
