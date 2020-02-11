@@ -98,36 +98,38 @@ class SignUp extends React.Component {
                 <div className="info-area info-horizontal mt-5">
                   <div className="icon icon-warning">
                     <i className="tim-icons icon-wifi" />
-                  </div>
+				  </div>
                   <div className="description">
-                    <h3 className="info-title">Movies</h3>
+                    <h3 className="info-title">Casino Online</h3>
                     <p className="description">
-                      Disfruta de las mejores peliculas que podras imaginar.
-                      Esto al mejor precio solo aqui.
+                      Disfruta juagando, imagina volverte millonario.
                     </p>
+					Eso y más AQUI.
                   </div>
                 </div>
+				
                 <div className="info-area info-horizontal">
                   <div className="icon icon-primary">
                     <i className="tim-icons icon-triangle-right-17" />
                   </div>
                   <div className="description">
-                    <h3 className="info-title">Comida</h3>
+                    <h3 className="info-title">Ruleta</h3>
                     <p className="description">
-                      Solo en el cine puedes disfrutrar de la mejor Comida que
-                      nadie mas puede llegar a tener.
+                      La ruleta es un juego de azar propio de los casinos.
+					  Los jugadores realizan sus apuestas sobre la mesa y la bola decide los ganadores.
                     </p>
                   </div>
                 </div>
+				
                 <div className="info-area info-horizontal">
                   <div className="icon icon-info">
                     <i className="tim-icons icon-trophy" />
                   </div>
                   <div className="description">
-                    <h3 className="info-title">Soporte</h3>
+                    <h3 className="info-title">Poker</h3>
                     <p className="description">
-                      Contamos con el mas grande soporte de todos los cines.
-                      Llamanos te atendemos.
+                      El poker es un juego de cartas en el que los jugadores, 
+					  con todas o parte de sus cartas ocultas, hacen apuestas en base a una puja inicial.
                     </p>
                   </div>
                 </div>
