@@ -70,7 +70,7 @@ class Home extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
       socket.on("active", payload => {
-        console.log(payload);
+        console.log("will", payload);
         this.setState({
           users: payload
         });

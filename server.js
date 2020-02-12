@@ -64,16 +64,12 @@ io.on("connection", function(socket) {
   });
 
   socket.on("get-time", data => {
-    if (myMap.get(data.room) > Date.now()) {
+    if (myMap.get(data.room) < Date.now()) {
+      myMap.set(data.room, Date.now() + 30000);
+    } else if (myMap.get(data.room) == undefined) {
       myMap.set(data.room, Date.now() + 30000);
     }
-
-    if (myMap.get(data.room) == undefined) {
-      myMap.set(data.room, Date.now() + 30000);
-    }
-
-    console.log(data.room, myMap.get(data.room));
-    io.to(data.room).emit("get-time", { getTime: 0 });
+    io.to(data.room).emit("get-time", { getTime: myMap.get(data.room) });
   });
 
   //revisar

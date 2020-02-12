@@ -1,7 +1,12 @@
 import React from "react";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 import { connect } from "react-redux";
+import { Launcher } from "react-chat-window";
+
+import Timer from "react-compound-timer";
+
 import { setAlert } from "../actions/alertActions";
 import { login, clearErrors, loadUser } from "../actions/authActions";
 import setAuthToken from "../utils/setAuthToken";
@@ -32,7 +37,7 @@ import Roulette from "../layout/Roulette";
 
 var socket = io("http://localhost:5000");
 
-class GameOne extends React.Component {
+class GameM extends React.Component {
   constructor(props) {
     super(props);
 
@@ -43,7 +48,9 @@ class GameOne extends React.Component {
       cantidad: 0,
       user: null,
       stop: false,
-      time: null
+      time: null,
+      time2: null,
+      messageList: []
     };
 
     this.onChange = this.onChange.bind(this);
@@ -57,12 +64,24 @@ class GameOne extends React.Component {
 
     const { id_room } = this.props;
 
+    if (id_room === "") {
+      this.props.history.push({ pathname: "/user/home" });
+    }
+
     socket = io("http://localhost:5000");
-    console.log("did");
+
+    socket.emit("login-room", this.props.id_room);
+
     socket.on("get-time", payload => {
-      console.log("componentDid", payload);
       this.setState({
-        time: payload.getTime
+        time: payload.getTime - Date.now(),
+        time2: payload.getTime
+      });
+    });
+
+    socket.on("msg-room", payload => {
+      this.setState({
+        messageList: [...this.state.messageList, payload.body]
       });
     });
 
@@ -79,9 +98,19 @@ class GameOne extends React.Component {
     }
   }
 
+  _onMessageWasSent(message) {
+    const { name } = this.props.user;
+    message.data.text = name + ": " + message.data.text;
+    socket.emit("msg-room", {
+      room: this.props.id_room,
+      text: message,
+      token: localStorage.getItem("token")
+    });
+  }
+
   onSubmit(e) {
     e.preventDefault();
-    const { cantidad } = this.state;
+    const { cantidad, time2 } = this.state;
     const { money } = this.state.user;
 
     if (cantidad > money) {
@@ -90,6 +119,9 @@ class GameOne extends React.Component {
         "danger",
         3000
       );
+    }
+    if (Date.now() > time2) {
+      return this.props.setAlert("Tiempo Agotado", "danger", 3000);
     }
 
     this.setState({
@@ -158,6 +190,17 @@ class GameOne extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    const { id_room } = this.props;
+
+    console.log("desconectado");
+    socket.emit("exit", {
+      room: { id_room }
+    });
+
+    socket.close();
+  }
+
   render() {
     const prize_arr = [
       "0",
@@ -199,17 +242,38 @@ class GameOne extends React.Component {
       "32 Rojo"
     ];
 
-    const { numero, inicio } = this.state;
+    const { numero, inicio, time } = this.state;
     var money = "";
     if (this.state.user != null) {
       money = this.state.user.money;
+    }
+
+    const { id_room } = this.props;
+
+    let timer;
+    if (time != null) {
+      timer = (
+        <Timer
+          initialTime={time}
+          direction="backward"
+          onStop={() => {
+            console.log("hello");
+          }}
+        >
+          {() => (
+            <React.Fragment>
+              <Timer.Seconds /> seconds
+            </React.Fragment>
+          )}
+        </Timer>
+      );
     }
 
     return (
       <div className="content">
         <div className="content">
           <Row>
-            <Col md="6" className="ml-auto mr-auto mt-5">
+            <Col md="3" className="ml-auto mr-auto mt-5">
               <Card>
                 <CardBody className="pull-right py-1">
                   <h3 tag="h3"> Numero Ganador</h3>
@@ -217,13 +281,17 @@ class GameOne extends React.Component {
                 </CardBody>
               </Card>
             </Col>
-            <Col md="6" className="ml-auto mr-auto mt-5">
+            <Col md="3" className="ml-auto mr-auto mt-5">
               <Card>
                 <CardBody className="pull-left py-1">
                   <h3 tag="h3"> Dinero</h3>
                   <h2> {money} </h2>
                 </CardBody>
               </Card>
+            </Col>
+
+            <Col md="3" className="ml-auto mr-auto mt-5">
+              {timer}
             </Col>
           </Row>
           <Row>
@@ -314,8 +382,18 @@ class GameOne extends React.Component {
               </Form>
             </Col>
           </Row>
+          <Launcher
+            agentProfile={{
+              teamName: "Casino Chat Private",
+              imageUrl:
+                "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
+            }}
+            onMessageWasSent={this._onMessageWasSent.bind(this)}
+            messageList={this.state.messageList}
+            showEmoji
+          />
         </div>
-        <span>Codigo: </span>
+        <span>Codigo: {id_room}</span>
       </div>
     );
   }
@@ -331,4 +409,4 @@ export default connect(mapStateToProps, {
   clearErrors,
   loadUser,
   setAlert
-})(GameOne);
+})(withRouter(GameM));
